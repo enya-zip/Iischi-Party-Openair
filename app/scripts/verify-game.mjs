@@ -5,6 +5,9 @@ import * as rules from "../src/logic.js";
 const { meta, setup, validateAction, applyAction, isGameOver, viewFor } = rules;
 const PLAYER = "player-one";
 let groups = 0;
+const CHART = setup([PLAYER]);
+const F = CHART.notes[0].t;      // first note (lane 0)
+const T2 = CHART.notes[2].t;     // third note (lane 2)
 function check(name, fn) {
   fn();
   groups += 1;
@@ -39,24 +42,35 @@ check("six exports and identical client/server rules", () => {
   );
 });
 
-check("deterministic chart and complete final hit window", () => {
+check("deterministic beat chart for every track tempo", () => {
   const state = setup([PLAYER]);
   assert.deepEqual(state, setup([PLAYER]));
+  assert.equal(state.bpm, 124);
   assert.equal(state.notes.length, 84);
-  assert.equal(state.notes[0].t, 2000);
-  assert.equal(state.notes.at(-1).t, 43875);
-  assert.equal(state.notes.at(-1).t + 180, 44055);
-  assert.ok(state.notes.every((note, index, notes) =>
-    note.id === index && note.status === 0 && Number.isInteger(note.t) &&
-    note.lane >= 0 && note.lane <= 2 &&
-    (index === 0 || note.t - notes[index - 1].t >= 375)
-  ));
-  assert.deepEqual(JSON.parse(JSON.stringify(state)), state);
+  assert.equal(state.notes[0].t, 1935);
+  assert.equal(state.notes.at(-1).t, 43548);
+  assert.equal(setup([PLAYER], { bpm: "abc" }).bpm, 124);
+  assert.equal(setup([PLAYER], { bpm: 60 }).bpm, 121);
+  assert.equal(setup([PLAYER], { bpm: 999 }).bpm, 160);
+  for (const bpm of [121, 124, 126, 128, 132, 160]) {
+    const chart = setup([PLAYER], { bpm });
+    const beatMs = 60000 / bpm;
+    assert.equal(chart.notes.length, 84);
+    assert.ok(chart.notes.every((note, index, notes) =>
+      note.id === index && note.status === 0 && Number.isInteger(note.t) &&
+      note.lane >= 0 && note.lane <= 2 &&
+      Number.isInteger(note.beat * 2) &&                       // on whole or half beats
+      note.t === Math.round(note.beat * beatMs) &&             // exactly on the music grid
+      (index === 0 || note.beat - notes[index - 1].beat >= 0.5)
+    ));
+    assert.ok(chart.notes.at(-1).t + 180 < 45000);
+    assert.deepEqual(JSON.parse(JSON.stringify(chart)), chart);
+  }
 });
 
 check("inclusive hit windows and precision scoring", () => {
   for (const offset of [-180, -125, -65, 0, 65, 125, 180]) {
-    const state = tap(setup([PLAYER]), 2000 + offset, 0);
+    const state = tap(setup([PLAYER]), F + offset, 0);
     assert.equal(state.hits, 1);
     assert.equal(state.notes[0].status, 1);
     assert.equal(state.score, Math.round(100 - Math.abs(offset) * 0.25));
@@ -65,7 +79,7 @@ check("inclusive hit windows and precision scoring", () => {
       Math.abs(offset) <= 65 ? "perfect" : Math.abs(offset) <= 125 ? "good" : "close");
   }
   for (const offset of [-181, 181]) {
-    const state = tap(setup([PLAYER]), 2000 + offset, 0);
+    const state = tap(setup([PLAYER]), F + offset, 0);
     assert.equal(state.hits, 0);
     assert.equal(state.score, 0);
     assert.equal(state.lastEvent.kind, "wrong");
@@ -75,12 +89,12 @@ check("inclusive hit windows and precision scoring", () => {
 
 check("hostile actions, spectator input and backwards time are rejected", () => {
   const state = setup([PLAYER]);
-  assert.equal(validateAction(state, "spectator", { type: "tap", at: 2000, lane: 0 }).error, "not_player");
+  assert.equal(validateAction(state, "spectator", { type: "tap", at: F, lane: 0 }).error, "not_player");
   for (const at of [NaN, Infinity, -Infinity, -1, 45001, 0.5, "2000", null]) {
     assert.equal(validateAction(state, PLAYER, { type: "tick", at }).error, "invalid_time");
   }
   for (const lane of [-1, 3, 0.1, NaN, "0", null]) {
-    assert.equal(validateAction(state, PLAYER, { type: "tap", at: 2000, lane }).error, "invalid_lane");
+    assert.equal(validateAction(state, PLAYER, { type: "tap", at: F, lane }).error, "invalid_lane");
   }
   assert.equal(validateAction(state, PLAYER, null).error, "invalid_action");
   assert.equal(validateAction(state, PLAYER, []).error, "invalid_action");
@@ -92,45 +106,45 @@ check("hostile actions, spectator input and backwards time are rejected", () => 
 });
 
 check("global 90-ms lock closes multi-lane and repeat-input scoring", () => {
-  const hit = tap(setup([PLAYER]), 2000, 0);
+  const hit = tap(setup([PLAYER]), F, 0);
   assert.equal(hit.score, 100);
   for (const lane of [0, 1, 2]) {
-    for (const at of [2000, 2050, 2089]) {
+    for (const at of [F, F + 50, F + 89]) {
       const action = { type: "tap", at, lane };
       assert.equal(validateAction(hit, PLAYER, action).error, "rate_limited");
       assert.deepEqual(applyAction(hit, PLAYER, action), hit);
     }
   }
-  const repeat = tap(hit, 2090, 0);
+  const repeat = tap(hit, F + 90, 0);
   assert.equal(repeat.hits, 1);
   assert.equal(repeat.score, 50);
   assert.equal(repeat.combo, 0);
   assert.equal(repeat.notes[0].status, 1);
   assert.equal(repeat.lastEvent.kind, "wrong");
-  const wrongFirst = tap(setup([PLAYER]), 1950, 1);
-  assert.equal(validateAction(wrongFirst, PLAYER, { type: "tap", at: 2000, lane: 0 }).error, "rate_limited");
-  assert.deepEqual(validateAction(wrongFirst, PLAYER, { type: "tap", at: 2040, lane: 0 }), { ok: true });
+  const wrongFirst = tap(setup([PLAYER]), F - 50, 1);
+  assert.equal(validateAction(wrongFirst, PLAYER, { type: "tap", at: F, lane: 0 }).error, "rate_limited");
+  assert.deepEqual(validateAction(wrongFirst, PLAYER, { type: "tap", at: F + 40, lane: 0 }), { ok: true });
 });
 
 check("misses reset combo before a later tap, with no repeated miss events", () => {
-  let state = tap(setup([PLAYER]), 2000, 0);
-  state = tap(state, 3500, 2);
+  let state = tap(setup([PLAYER]), F, 0);
+  state = tap(state, T2, 2);
   assert.equal(state.hits, 2);
   assert.equal(state.misses, 1);
   assert.equal(state.combo, 1);
   assert.equal(state.score, 200);
   assert.equal(state.lastEvent.multiplier, 1);
-  const missed = step(setup([PLAYER]), { type: "tick", at: 2181 });
+  const missed = step(setup([PLAYER]), { type: "tick", at: F + 181 });
   assert.equal(missed.lastEvent.kind, "miss");
   assert.equal(missed.eventId, 1);
-  const sameInstant = step(missed, { type: "tick", at: 2181 });
+  const sameInstant = step(missed, { type: "tick", at: F + 181 });
   assert.equal(sameInstant.eventId, 1);
   assert.deepEqual(sameInstant, missed);
 });
 
 check("wrong taps reduce score and never produce negative values", () => {
-  let state = tap(setup([PLAYER]), 2000, 0);
-  for (const at of [2090, 2180, 2270]) state = tap(state, at, 2);
+  let state = tap(setup([PLAYER]), F, 0);
+  for (const at of [F + 90, F + 180, F + 270]) state = tap(state, at, 2);
   assert.equal(state.score, 0);
   assert.equal(state.hits, 1);
   assert.equal(state.combo, 0);
@@ -138,6 +152,11 @@ check("wrong taps reduce score and never produce negative values", () => {
 });
 
 check("perfect round has 27600 points, 84 hits and bounded multiplier", () => {
+  for (const bpm of [124, 126, 128, 132]) {
+    let chart = setup([PLAYER], { bpm });
+    for (const note of chart.notes) chart = tap(chart, note.t, note.lane);
+    assert.equal(chart.score, 27600);
+  }
   let state = setup([PLAYER]);
   for (const note of state.notes) state = tap(state, note.t, note.lane);
   assert.equal(state.score, 27600);
@@ -181,7 +200,7 @@ check("immutable input, defensive views, deterministic replay and reset", () => 
   players[0] = "changed";
   assert.equal(initial.players[0], PLAYER);
   const snapshot = JSON.stringify(initial);
-  const next = tap(initial, 2000, 0);
+  const next = tap(initial, F, 0);
   assert.equal(JSON.stringify(initial), snapshot);
   assert.notEqual(next, initial);
   assert.notEqual(next.notes, initial.notes);
@@ -193,9 +212,9 @@ check("immutable input, defensive views, deterministic replay and reset", () => 
   assert.equal(next.notes[0].status, 1);
   assert.equal(next.lastEvent.kind, "hit");
   const actions = [
-    { type: "tap", at: 2000, lane: 0 },
-    { type: "tick", at: 3000 },
-    { type: "tap", at: 3500, lane: 2 },
+    { type: "tap", at: F, lane: 0 },
+    { type: "tick", at: F + 1000 },
+    { type: "tap", at: T2, lane: 2 },
     { type: "finish", at: 45000 },
   ];
   assert.deepEqual(replay(actions), replay(actions));

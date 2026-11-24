@@ -26,26 +26,48 @@ function emit(state, event) {
   state.lastEvent = event;
 }
 
-export function setup(players) {
+// The chart is written in beats, so every note lands exactly on the music's grid
+// (whole beats, and half beats in the finale). Every track uses the same 84 notes,
+// so scores stay comparable across tracks. Tempo range keeps the last note inside 45 s.
+const MIN_BPM = 121;
+const MAX_BPM = 160;
+const DEFAULT_BPM = 124;
+const LEAD_BEATS = 4;
+const SECTIONS = [
+  { count: 16, steps: [2], lanes: [0, 1, 2, 1, 0, 2, 1, 2] },
+  { count: 28, steps: [1], lanes: [2, 0, 1, 2, 1, 0, 2, 0, 1, 0] },
+  { count: 40, steps: [1, 0.5, 0.5], lanes: [0, 2, 1, 0, 1, 2, 0, 2, 1, 2, 0, 1] },
+];
+
+function chartBpm(options) {
+  const bpm = options && typeof options === "object" ? Number(options.bpm) : DEFAULT_BPM;
+  if (!Number.isFinite(bpm)) return DEFAULT_BPM;
+  return Math.min(MAX_BPM, Math.max(MIN_BPM, Math.round(bpm * 100) / 100));
+}
+
+export function setup(players, options) {
+  const bpm = chartBpm(options);
+  const beatMs = 60000 / bpm;
   const notes = [];
-  const sections = [
-    { start: 2000, count: 17, spacing: 750, lanes: [0, 1, 2, 1, 0, 2, 1, 2] },
-    { start: 15000, count: 29, spacing: 500, lanes: [2, 0, 1, 2, 1, 0, 2, 0, 1, 0] },
-    { start: 30000, count: 38, spacing: 375, lanes: [0, 2, 1, 0, 1, 2, 0, 2, 1, 2, 0, 1] },
-  ];
-  for (const section of sections) {
+  let beat = LEAD_BEATS;
+  SECTIONS.forEach((section, sectionIndex) => {
+    if (sectionIndex === 1) beat = Math.ceil(beat);
+    if (sectionIndex === 2) beat = Math.ceil(beat);
     for (let index = 0; index < section.count; index += 1) {
       notes.push({
         id: notes.length,
-        t: section.start + index * section.spacing,
+        t: Math.round(beat * beatMs),
+        beat,
         lane: section.lanes[index % section.lanes.length],
         status: 0,
       });
+      beat += section.steps[index % section.steps.length];
     }
-  }
+  });
   return {
     players: Array.isArray(players) ? players.slice(0, 1) : [],
     duration: DURATION,
+    bpm,
     notes,
     score: 0,
     combo: 0,

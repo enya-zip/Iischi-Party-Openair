@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#090909">
+  <meta name="description" content="Die Iischi Party: 45 Sekunden Party im spielbaren Konzept für Openair Gampel 2027.">
+  <title>Iischi Party — 45 Sekunden Vollgas. Vier Tage Gampel.</title>
+  <meta property="og:title" content="Iischi Party 2027">
+  <meta property="og:description" content="45 Sekunden. Drei Spuren. Dein Partyrekord. Ein spielbarer Konzeptentwurf.">
+  <meta property="og:url" content="https://iischi-party.higgsfield.app">
+  <link rel="icon" href="assets/gampel-logo.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/RTRondelle-Black.woff2" as="font" type="font/woff2" crossorigin>
+  <meta property="og:type" content="website"><meta property="og:image" content="https://iischi-party.higgsfield.app/assets/iischi-party-og.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:image" content="https://iischi-party.higgsfield.app/assets/iischi-party-og-wide.png"><link rel="canonical" href="https://iischi-party.higgsfield.app/"><link rel="apple-touch-icon" href="assets/apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="style.css">
+  <script type="module" src="client.js"></script>
+  <script src="ui.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./" aria-label="Iischi Party Startseite">
+      <img src="assets/gampel-logo.svg" width="48" height="48" alt="Openair Gampel">
+      <span>OPENAIR<br>GAMPEL <span class="year">2027</span></span>
+    </a>
+    <div class="header-note"><span class="status-dot"></span> SPIELVORSCHAU</div>
+    <button class="header-link" data-open="rules-dialog">So spielst du <span aria-hidden="true">↗</span></button>
+  </header>
+
+  <main class="hero">
+    <section class="hero-copy" aria-labelledby="hero-title">
+      <div class="eyebrow"><span class="mini-star" aria-hidden="true">✳</span> BRAVO STAGE · KONZEPT 2027</div>
+      <h1 id="hero-title">IISCHI<br><span class="lime-word">PARTY<span class="period">.</span></span></h1>
+      <p class="hero-description">45 Sekunden Vollgas.<br>Vier Tage Gampel.</p>
+      <div class="prize-line">
+        <div class="prize-number">5<span>×</span></div>
+        <div><strong>4-TAGESPASS</strong><span>für die Top 5 der Schlussrangliste*</span></div>
+        <svg class="ticket-doodle" viewBox="0 0 100 70" aria-hidden="true"><path d="M8 15h83v13a9 9 0 0 0 0 18v13H8V46a9 9 0 0 0 0-18V15Z"/><path d="M65 15v44" stroke-dasharray="4 4"/><path d="m24 36 8 8 16-18"/></svg>
+      </div>
+      <p class="hero-fineprint">*Geplante Gewinnaktion. Hier testest du das Spiel,<br>eine Teilnahme ist noch nicht möglich.</p>
+      <div class="hero-actions"><button class="text-button" data-open="rules-dialog">So funktioniert’s <span>↗</span></button><span class="separator">/</span><button class="text-button" data-open="ticket-dialog">Ticketinfos <span>↗</span></button><span class="separator">/</span><button class="text-button" type="button" data-board>Rangliste <span>↗</span></button></div>
+    </section>
+
+    <section class="game-console" aria-label="Iischi Party">
+      <div class="console-top"><div class="game-wordmark">IISCHI PARTY<span>DIE HITMASCHINE / GAMPEL 2027</span></div><button id="sound-toggle" class="sound-button" type="button" aria-pressed="false" aria-label="Sound einschalten"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 9h4l5-4v14l-5-4H3Z"/><path d="M16 8c3 2 3 6 0 8M19 4c5 4 5 12 0 16"/></svg><span id="sound-label">Sound aus</span></button></div>
+
+      <div id="start-screen" class="screen start-screen">
+        <div class="start-tag">45 SEKUNDEN. DEIN PARTYREKORD.</div>
+        <div class="record-art"><img src="assets/hero.webp" width="600" height="400" alt="Bunte Plattenspieler, Diskokugel und Konfetti für Iischi Party" fetchpriority="high"></div>
+        <h2>BRING DIE<br>CROWD ZUM TANZEN.</h2>
+        <p class="start-description">Triff die Platten auf der Linie.<br>Halte die Serie. Knack deinen Rekord.</p>
+        <div class="track-picker"><span class="track-label" id="track-label">MUSIK WÄHLEN</span><div id="track-options" class="track-options" role="radiogroup" aria-labelledby="track-label"></div></div>
+        <button id="start-game" type="button" class="button button-lime">PARTY STARTEN <span aria-hidden="true">↗</span></button>
+        <div class="start-meta"><span>45 SEKUNDEN</span><span>3 SPUREN</span><span>PURE PARTY</span></div>
+        <p class="personal-best">Dein Rekord <strong id="start-best">0</strong></p>
+      </div>
+
+      <div id="play-screen" class="screen play-screen" hidden>
+        <div class="scorebar"><div><span>PUNKTE</span><strong id="score">0</strong></div><div class="combo-value"><span>SERIE</span><strong id="combo">0</strong></div><div class="time-value"><span>SEKUNDEN</span><strong id="time-left">45</strong></div></div>
+        <div class="time-track"><div id="progress-fill"></div></div>
+        <div class="phase-row"><span><i class="live-dot"></i><strong id="phase-name">DISCO</strong></span><button id="pause-game" type="button" class="pause-button" aria-label="Spiel pausieren">Ⅱ</button></div>
+        <div id="arena" class="arena"><canvas id="game-canvas" aria-label="Drei Spuren mit fallenden Platten. Tippe auf die passende Taste, wenn eine Platte die Linie erreicht."></canvas><div id="feedback" class="feedback" aria-live="off"></div><div id="countdown-overlay" class="arena-overlay" hidden><span>READY?</span><strong id="countdown-number">3</strong></div><div id="pause-overlay" class="arena-overlay" hidden><strong>PAUSE.</strong><p>Die Party wartet auf dich.</p><span>Oben auf Weiter tippen.</span></div></div>
+        <div class="pads" aria-label="Spielsteuerung"><button type="button" data-lane="0" aria-label="Linke Spur, Taste A"><span class="pad-dot"></span><span>A <i>LINKS</i></span></button><button type="button" data-lane="1" aria-label="Mittlere Spur, Taste S"><span class="pad-dot"></span><span>S <i>MITTE</i></span></button><button type="button" data-lane="2" aria-label="Rechte Spur, Taste D"><span class="pad-dot"></span><span>D <i>RECHTS</i></span></button></div>
+        <div class="party-level"><span>CROWD-ENERGIE</span><div><div id="party-meter"></div></div></div>
+        <div class="play-footer"><span>Auf der Linie? Jetzt tippen.</span><button id="exit-game" type="button">Beenden ↗</button></div>
+      </div>
+
+      <div id="result-screen" class="screen result-screen" hidden>
+        <div class="result-icon" aria-hidden="true">✳</div>
+        <div class="start-tag">DAS WAR DEINE PARTY.</div>
+        <h2 id="final-message">SAUBER<br>ABGELIEFERT.</h2>
+        <div class="final-score"><strong id="final-score">0</strong><span>PUNKTE</span></div>
+        <div class="result-details"><div><span>TREFFER</span><strong id="final-accuracy">0%</strong></div><div><span>BESTE SERIE</span><strong id="final-combo">0</strong></div><div><span>DEIN REKORD</span><strong id="best-score">0</strong></div></div>
+        <p id="result-status" class="result-status" role="status">Trag dich in die Rangliste ein und sieh, wo du stehst.</p>
+        <button id="to-board" type="button" class="button button-lime">ZUR RANGLISTE <span aria-hidden="true">↗</span></button>
+        <button id="play-again" type="button" class="button button-outline board-again-button">NOCH EINE RUNDE <span aria-hidden="true">↻</span></button>
+        <div class="result-actions"><button id="share-score" type="button" class="button button-outline">SCORE KOPIEREN ↗</button><button type="button" class="button button-purple" data-open="ticket-dialog">TICKETINFOS ↗</button></div>
+        <p id="share-status" class="share-status" aria-live="polite"></p>
+        <p class="result-prize">Die echte Party dauert vier Tage.<br><strong>Wir sehen uns in Gampel.</strong></p>
+      </div>
+      <div class="console-bottom"><span class="demo-dot"></span> SPIELVORSCHAU · PERSÖNLICHER REKORD · KEIN GEWINNSPIEL</div>
+    </section>
+  </main>
+
+  <div class="party-strip" aria-hidden="true"><div>DISCO <span>✳</span> 90s PARTY <span>✳</span> MITSINGKLASSIKER <span>✳</span> GAMPEL 2027 <span>✳</span> DISCO <span>✳</span> 90s PARTY <span>✳</span> MITSINGKLASSIKER</div></div>
+  <footer class="site-footer"><span>18.–22. AUGUST 2027</span><span>Klassiker im Kopf. Gampel im Kalender.</span><button class="text-button" data-open="about-dialog">Zum Entwurf ↗</button></footer>
+
+  <dialog id="rules-dialog" aria-labelledby="rules-title"><div class="dialog-top"><span>SO LÄUFT DIE PARTY</span><button class="close-dialog" aria-label="Schliessen">×</button></div><h2 id="rules-title">45 SEKUNDEN.<br>ALLES GEBEN.</h2><ol class="steps"><li><strong>Platten im Blick.</strong><p>Jede Platte läuft auf eine der drei Trefferzonen zu.</p></li><li><strong>Auf der Linie tippen.</strong><p>Nutze die passende Taste unter der Spur. Am Computer gehen auch A, S und D.</p></li><li><strong>Serie halten.</strong><p>Präzise Treffer geben mehr Punkte. Eine Serie erhöht deinen Multiplikator. Danebentippen kostet Punkte.</p></li></ol><div class="note-panel"><strong>Für die geplante Aktion</strong><p>Die fünf Besten der geprüften Schlussrangliste erhalten je einen Vier-Tagespass für Gampel 2027. Pro Person zählt der beste gültige Versuch. Laufzeit und Teilnahmebedingungen werden vor dem Kampagnenstart festgelegt.</p></div><label class="motion-setting"><input id="reduce-motion" type="checkbox"> Weniger Animation</label><p class="dialog-footnote">Hier läuft eine Spielvorschau mit lokalem Rekord. Du kannst weder teilnehmen noch bereits ein Ticket gewinnen. Spielen funktioniert auch ohne Sound.</p><button class="button button-lime close-dialog">VERSTANDEN ↗</button></dialog>
+
+  
+
+  <dialog id="ticket-dialog" aria-labelledby="ticket-title"><div class="dialog-top"><span>DEIN SOMMER 2027</span><button class="close-dialog" aria-label="Schliessen">×</button></div><div class="ticket-stamp">4<br><span>TAGE</span></div><h2 id="ticket-title">DIE ECHTE PARTY<br>DAUERT LÄNGER.</h2><p class="dialog-lead">Vier Tage Gampel. Deine Leute.<br>Und die Songs, die alle mitsingen.</p><div class="note-panel"><strong>Ticketbereich im Entwurf</strong><p>In der Kampagne führt dieser Button direkt zum offiziellen Vorverkauf. Der Ticketshop für die Aktion ist hier noch nicht angeschlossen.</p></div><a class="button button-lime" href="https://www.openairgampel.ch/de/home" target="_blank" rel="noopener noreferrer">ZUR GAMPEL-WEBSITE <span>↗</span></a><p class="dialog-footnote">Die Gewinnaktion ist noch nicht gestartet. Festivaldatum laut offizieller Website: 18.–22. August 2027.</p></dialog>
+
+  <dialog id="about-dialog" aria-labelledby="about-title"><div class="dialog-top"><span>KONZEPTSTAND / 28.10.2026</span><button class="close-dialog" aria-label="Schliessen">×</button></div><h2 id="about-title">VORFREUDE<br>ZUM SPIELEN.</h2><p>Spielvorschau für eine Ticketkampagne im November oder Dezember 2026 für das Openair Gampel 2027. «Bravo Stage» ist hier der Arbeitstitel.</p><p>Die Gestaltung übernimmt Farben, RT Rondelle und das Signet der aktuellen <a href="https://www.openairgampel.ch/de/home" target="_blank" rel="noopener noreferrer">Gampel-Website</a>. Das ist ein Gestaltungsentwurf auf dieser Basis, noch kein freigegebenes Stage-Design.</p><p>Das Spiel nutzt einen eigens erzeugten Beat und einen eigenen Partytrack. Die ausgewählten Originalklassiker kommen später mit den freigegebenen Clips dazu. Der Rekord wird nur auf deinem Gerät gespeichert.</p><div class="note-panel"><strong>Für den Kampagnenstart</strong><p>Offizielle Rangliste mit verifizierten Teilnahmen und geprüften Scores, freigegebene Musik, definitive Teilnahmebedingungen und der direkte Ticketshop-Link.</p></div><button class="button button-lime close-dialog">ZURÜCK ZUR PARTY ↗</button></dialog>
+  <dialog id="board-dialog" class="board-dialog" aria-labelledby="board-title"><div class="dialog-top"><span>IISCHI PARTY · GAMPEL 2027</span><button class="close-dialog" aria-label="Schliessen">×</button></div><h2 id="board-title">RANG&shy;LISTE.</h2><div id="board-score-box" class="board-score"><span>DEINE PUNKTE</span><strong id="board-score">0</strong></div><div id="board-entry"><p>Trag dich ein und sieh, wo du stehst.</p><form id="board-form" class="board-form"><label for="board-name">Name</label><input id="board-name" name="name" type="text" autocomplete="nickname" maxlength="24" required><label for="board-email">E-Mail-Adresse</label><input id="board-email" name="email" type="email" autocomplete="email" maxlength="254" required><small>Deine E-Mail-Adresse wird nie angezeigt.</small><label class="board-consent"><input id="board-consent" type="checkbox" required><span>Ich bin einverstanden, dass Schnyder Werbung AG meinen Namen, meine E-Mail-Adresse und meine Punkte für die Rangliste speichert. <a href="https://schnyder-werbung.ch/datenschutz" target="_blank" rel="noopener noreferrer">Datenschutz</a></span></label><button id="board-submit" class="button button-lime" type="submit">EINTRAGEN ↗</button></form><button id="board-view-only" class="text-button board-view-only" type="button">Nur Rangliste ansehen <span>↗</span></button></div><div id="board-view" hidden><p id="board-rank" class="board-rank-note" hidden></p><ol id="board-list" class="board-list" aria-live="polite"></ol></div><p id="board-message" class="board-message" role="status" hidden></p><button id="board-again" class="button button-outline" type="button">NOCH EINE RUNDE ↻</button></dialog>
+</body>
+</html>

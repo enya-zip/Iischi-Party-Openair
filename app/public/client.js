@@ -15,8 +15,8 @@ let elapsed=0,startedAt=0,countdownStartedAt=0,countdownNumber='',raf=0,lastFram
 let lastRun=null,runCounter=0,feedbackUntil=0,width=340,height=360,particles=[],laneFlash=[0,0,0],best=0,previousBest=0;
 let soundEnabled=true,audioContext=null,audioMaster=null,noiseBuffer=null,audioOrigin=0,nextAudioStep=0;
 const audioVoices=new Set();
-const backgroundMusic=new Audio('/assets/party-track.mp3');backgroundMusic.loop=true;backgroundMusic.volume=.38;backgroundMusic.preload='auto';
-const victorySound=new Audio('/assets/victory.mp3');victorySound.volume=.28;victorySound.preload='none';
+const backgroundMusic=new Audio('assets/party-track.mp3');backgroundMusic.loop=true;backgroundMusic.volume=.38;backgroundMusic.preload='auto';
+const victorySound=new Audio('assets/victory.mp3');victorySound.volume=.28;victorySound.preload='none';
 try{const n=Number(localStorage.getItem(BEST_KEY));if(Number.isFinite(n)&&n>=0&&n<=27600)best=n;const mute=localStorage.getItem('iischi-sound');if(mute!==null)soundEnabled=mute==='on';if(localStorage.getItem('iischi-reduced-motion')==='on')reducedMotion=true;}catch{}
 put('start-best',number(best));put('best-score',number(best));
 if($('reduce-motion'))$('reduce-motion').checked=reducedMotion;

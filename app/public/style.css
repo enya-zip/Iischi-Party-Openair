@@ -16,7 +16,7 @@
 @media(max-width:360px){h1{font-size:44px}.hero-description{font-size:10px}.prize-line{max-width:145px}}
 
 .record-art{margin:6px -8px 10px;overflow:hidden}.record-art img{display:block;width:100%;height:220px;object-fit:cover;object-position:60% 50%;border:0}
-.arena{background:#090909 url('/assets/stage.webp') center/cover}.arena canvas{background:transparent}
+.arena{background:#090909 url('assets/stage.webp') center/cover}.arena canvas{background:transparent}
 .motion-setting{display:flex;gap:10px;align-items:center;margin-top:20px;font-size:13px}.motion-setting input{width:19px;height:19px;accent-color:var(--lime)}
 .feedback{font-size:20px;top:32%;line-height:1.1}
 @media(max-width:760px){.record-art img{height:200px}.screen{padding-bottom:max(16px,env(safe-area-inset-bottom))}.pads button{min-height:66px}.hero{padding-bottom:max(32px,env(safe-area-inset-bottom))}.game-console{scroll-margin-top:8px}.console-bottom{font-size:7px}.start-meta{font-size:8px}.game-wordmark>span{font-size:8px}.dialog-footnote{font-size:11px!important}.hero-fineprint{font-size:11px}.site-footer{font-size:10px}.hero-description{font-size:12px}.prize-line div>span:not(.prize-number>span){font-size:8px}.feedback{font-size:19px}}

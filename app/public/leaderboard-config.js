@@ -1,0 +1,9 @@
+// Verbindung zur Supabase-Rangliste.
+// url: Projekt-Adresse (steht im Supabase-Dashboard unter "Connect")
+// key: "Publishable key" (beginnt mit sb_publishable_) unter "Settings -> API Keys".
+//      Dieser Schlüssel darf öffentlich sein. Den "Secret key" NIE hier eintragen.
+// Solange beide leer sind, zeigt das Spiel "Die Rangliste ist noch nicht verbunden."
+export const LEADERBOARD = Object.freeze({
+  url: "",
+  key: ""
+});

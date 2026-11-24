@@ -27,7 +27,7 @@ export const copy={
     "NOCH EINE RUNDE?"
   ],
   "newBest": "Neuer persönlicher Rekord auf diesem Gerät.",
-  "localScore": "Dein Ergebnis bleibt auf diesem Gerät.",
+  "localScore": "Trag dich in die Rangliste ein und sieh, wo du stehst.",
   "share": "Ich habe {score} Punkte bei Iischi Party geholt. Schaffst du mehr? Spielvorschau für Openair Gampel 2027.",
   "copied": "Ergebnis kopiert. Jetzt kannst du es teilen."
 };

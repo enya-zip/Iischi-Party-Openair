@@ -83,10 +83,10 @@ begin
 end;
 $$;
 
--- Übersicht für das Supabase-Dashboard (Table Editor -> rangliste):
+-- Übersicht für das Supabase-Dashboard (Table Editor -> iischi_rangliste):
 -- bestes Ergebnis pro Spieler mit E-Mail, sortiert nach Platz.
 -- Nur im Dashboard sichtbar, das Spiel hat keinen Zugriff.
-create or replace view public.rangliste with (security_invoker = true) as
+create or replace view public.iischi_rangliste with (security_invoker = true) as
   with best as (
     select distinct on (lower(s.email)) s.name, s.email, s.score, s.accuracy, s.best_combo, s.created_at
     from public.iischi_scores s
@@ -101,7 +101,7 @@ create or replace view public.rangliste with (security_invoker = true) as
   from best b join runs r on r.player = lower(b.email)
   order by b.score desc, b.created_at asc;
 
-revoke all on table public.rangliste from anon, authenticated;
+revoke all on table public.iischi_rangliste from anon, authenticated;
 revoke all on function public.iischi_board(integer) from public;
 revoke all on function public.iischi_submit(text, text, integer, integer, integer) from public;
 grant execute on function public.iischi_board(integer) to anon, authenticated;

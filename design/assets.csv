@@ -1,0 +1,10 @@
+id,role,type,description,size/ratio,style line ref,source
+cover_scene_a,hero and social cover,image,festival turntable party collage,3:2 2k,formula,generate
+cover_scene_b,alternate cover candidate,image,festival turntable party collage,3:2 2k,formula,generate
+stage_plate,subtle gameplay backdrop,image,dark graphic stage atmosphere,16:9 1k,formula,generate
+original_track,menu and results music,audio,original disco eurodance instrumental 120bpm,30s,formula,generate
+victory_sfx,round end feedback,audio,short confetti victory chime,1s,formula,generate
+gampel_logo,brand and icons,svg,official round festival logo,vector,official,reference_media[0]
+rondelle_fonts,interface typography,font,RT Rondelle Black Bold Medium,woff2,official,reference_media[1]
+vinyl_notes,precision gameplay object,canvas,three solid vinyl discs with lane marks,vector,formula,generate
+timing_drums,exact beat clock,audio-procedural,phase locked original percussion,45s,formula,generate

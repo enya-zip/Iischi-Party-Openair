@@ -80,7 +80,7 @@ export function setupLeaderboard({ getRun }) {
     if (!configured()) { setMessage('notConfigured'); return; }
     setMessage('loading');
     try {
-      const rows = await rpc('iischi_board', { p_limit: BOARD_SIZE });
+      const rows = await rpc('iischi_party_board', { p_limit: BOARD_SIZE });
       let marked = false;
       for (const entry of rows) {
         const mine = Boolean(lastResult) && !marked && Number(entry.rank) === lastResult.rank && entry.name === lastResult.name;
@@ -127,7 +127,7 @@ export function setupLeaderboard({ getRun }) {
     if (!configured()) { setMessage('notConfigured'); return; }
     busy = true; submit.disabled = true; submit.textContent = words.saving; setMessage('');
     try {
-      const [result] = await rpc('iischi_submit', {
+      const [result] = await rpc('iischi_party_submit', {
         p_name: name, p_email: email, p_score: run.score, p_accuracy: run.accuracy, p_combo: run.maxCombo
       });
       writePlayer({ name, email });

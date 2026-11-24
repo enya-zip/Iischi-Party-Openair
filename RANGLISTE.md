@@ -30,7 +30,7 @@ Der Publishable key darf öffentlich im Spiel stehen. Den **Secret key** (`sb_se
 Supabase → **Table Editor**:
 - `iischi_party_rangliste`: bestes Ergebnis pro Spieler mit Platz, Name, E-Mail, Punkten, Trefferquote, bester Serie, Anzahl Läufe und Datum.
   Daraus lassen sich am Schluss die Top 5 für die 4-Tagespässe ablesen.
-- `iischi_party_scores`: alle einzelnen Einträge. Hier lassen sich Einträge löschen
+- `iischi_party_alle_spiele`: alle einzelnen Spiele. Hier lassen sich Einträge löschen
   (z. B. bei Auskunfts- oder Löschanfragen nach Datenschutzgesetz oder bei verdächtigen Punktzahlen).
 
 ## Gut zu wissen
